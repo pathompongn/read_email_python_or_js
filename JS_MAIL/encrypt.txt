@@ -1,0 +1,31 @@
+import com.example.AESEncryptionUtil;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.apache.jmeter.protocol.http.util.Base64;
+import org.apache.commons.codec.binary.Base64;
+
+String token = vars.get("accessToken");
+token = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJHYkczU05LRWc3VHBJUkc0SGFqY180LTY1YmxFVV9OcTYtYmJaNFY1c0ZZIn0.eyJleHAiOjE3MzQ3OTU1ODYsImlhdCI6MTczNDY4NzU4NiwianRpIjoiNDg3N2QyOWUtMmZjMi00NGQxLTk1ZTUtODdhNzY2NGIwMDY4IiwiaXNzIjoiaHR0cHM6Ly9rZXljbG9hay11YXQudmF5dS1jbG91ZC5jb20vcmVhbG1zL25oc28tYXBwIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjMzNmU0YjE2LTkwZDAtNDJjMi04ZjhmLTgxYzYyNWZiZWI1MyIsInR5cCI6IkJlYXJlciIsImF6cCI6Im5oc28tYXBwLWNsaSIsInNlc3Npb25fc3RhdGUiOiJmZTJmYTMyNS01M2M4LTQxNzItYTA4Ni0yMTRhZWRmNzM4ZjkiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsImRlZmF1bHQtcm9sZXMtbmhzby1hcHAiLCJ1bWFfYXV0aG9yaXphdGlvbiIsIkxvYWR0ZXN0X-C4l-C4uOC4geC5gOC4guC4lV9FRElUT1IiXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6ImVtYWlsIHByb2ZpbGUiLCJzaWQiOiJmZTJmYTMyNS01M2M4LTQxNzItYTA4Ni0yMTRhZWRmNzM4ZjkiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsIm5hbWUiOiJMb2FkdGVzdDEgdGVzdGVyIiwicHJlZmVycmVkX3VzZXJuYW1lIjoibG9hZHRlc3QwMSIsImdpdmVuX25hbWUiOiJMb2FkdGVzdDEiLCJmYW1pbHlfbmFtZSI6InRlc3RlciIsImVtYWlsIjoiYWxvbmdrb3JuLnllYW1yYXl1YisyQGtydW5ndGhhaS5jb20ifQ.Sjpp1v7B8F2RRkRUM8AI8CLBj6pcJ1-fiRgGj1q3qL5xPs6zf3LhsRxfceD9RG-mSnfsnzGuITdxTA86omTTPhRL64KFGazz3HUg8bi2AkoM1H5vi68WDMcYb5TU7P-yjX-Ug52OrGXSwnKlEhukhHKeGafblBzTW0caiPF0YxbB5NaZl_H-tjYZIswSusr4kXf_9SJBb4Ujht06rRSXALN6Su3aesckNZQz5Q_x4afdHdSzGhsSM0KGhuGu7V-WJ-8AFR-yILKo58fFTU4YCdrXu0NLDixzDUILwXPeysuwtijriEjgjUvC0s8pHzvhTl4obY7aI0cQml0dchkg";
+
+String[] tokenParts = token.split("\\.");
+String encodedPayload = tokenParts[1];
+
+// Decode Base64 string
+byte[] decodedBytes = Base64.decodeBase64(encodedPayload.getBytes());
+String payload = new String(decodedBytes);
+
+Pattern pattern = Pattern.compile("\"sub\":\\s*\"([^\"]+)\"");
+Matcher matcher = pattern.matcher(payload);
+
+String subValue = "";
+
+if (matcher.find()) {
+    subValue = matcher.group(1);
+    log.info("Value of 'sub': " + subValue);
+} else {
+    log.info("'sub' not found in the payload");
+}
+
+//log.info("text: " + AESEncryptionUtil.encryptToken("2220",token));
+log.info("Encrypted text: " + AESEncryptionUtil.encrypt("2220", subValue));
+vars.put("ciphertext", AESEncryptionUtil.encrypt("2220", subValue));

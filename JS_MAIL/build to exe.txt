@@ -1,0 +1,2 @@
+npm install -g pkg
+pkg your_script.js -o your_executable
