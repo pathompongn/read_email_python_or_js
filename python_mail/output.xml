@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 6.0 (Python 3.10.9 on win32)" generated="20240611 10:24:57.944" rpa="false" schemaversion="3">
+<suite id="s1" name="Test" source="D:\Nong_Automate\Python_Project\mail\test.robot">
+<test id="s1-t1" name="Find Emails in Text" line="11">
+<kw name="Get OTP From Mail">
+<var>${OTP}</var>
+<arg>${Gmail}</arg>
+<arg>${pass_mail}</arg>
+<arg>${TEST_TEXT}</arg>
+<for flavor="IN RANGE">
+<var>${i}</var>
+<value>1</value>
+<value>${times}</value>
+<iter>
+<var name="${i}">1</var>
+<kw name="Read Emails" library="EmailLibrary">
+<var>${emails}</var>
+<arg>${Gmail}</arg>
+<arg>${pass_mail}</arg>
+<arg>${search_text}</arg>
+<msg timestamp="20240611 10:25:01.159" level="INFO">Found emails: [b'10']
+Subject: Fwd: [OCS] รหัส OTP เพื่อเข้าใช้งานระบบ OCS
+From: nong &lt;nong.nukhun@gmail.com&gt;
+To: nong &lt;nong.nukhun@gmail.com&gt;
+Date: Mon, 18 Sep 2023 13:24:21 +0700
+Content:
+ระบบรับส่งอิเล็กทรอนิกส์ : OTP
+**กรุณาอย่าตอบกลับเมลล์นี้** รหัสผ่านแบบใช้ครั้งเดียว (OTP) ของท่านคือ
+696965 เลขที่อ้างอิงDPAM รหัสนี้จะหมดอายุภายใน 180 วินาที
+
+Content:
+&lt;div dir="ltr"&gt;&lt;div class="gmail_quote"&gt;&lt;div dir="ltr"&gt;&lt;div class="gmail_quote"&gt;ระบบรับส่งอิเล็กทรอนิกส์ : OTP 
+
+&lt;u&gt;&lt;/u&gt;     &lt;div&gt; &lt;h4&gt; **กรุณาอย่าตอบกลับเมลล์นี้**  &lt;/h4&gt;  &lt;h4&gt;   รหัสผ่านแบบใช้ครั้งเดียว (OTP) ของท่านคือ 696965  เลขที่อ้างอิงDPAM  &lt;/h4&gt;  รหัสนี้จะหมดอายุภายใน 180 วินาที    &lt;/div&gt; 
+&lt;/div&gt;&lt;/div&gt;
+&lt;/div&gt;&lt;/div&gt;</msg>
+<msg timestamp="20240611 10:25:01.159" level="INFO">${emails} = &lt;div dir="ltr"&gt;&lt;div class="gmail_quote"&gt;&lt;div dir="ltr"&gt;&lt;div class="gmail_quote"&gt;ระบบรับส่งอิเล็กทรอนิกส์ : OTP 
+
+&lt;u&gt;&lt;/u&gt;     &lt;div&gt; &lt;h4&gt; **กรุณาอย่าตอบกลับเมลล์นี้**  &lt;/h4&gt;  &lt;h4&gt;   รหัสผ่านแบบใช้ครั้...</msg>
+<status status="PASS" starttime="20240611 10:24:57.980" endtime="20240611 10:25:01.159"/>
+</kw>
+<kw name="Check Is Found">
+<var>${Check_result}</var>
+<arg>${emails}</arg>
+<kw name="Set Variable" library="BuiltIn">
+<var>${Is_Found}</var>
+<arg>True</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20240611 10:25:01.160" level="INFO">${Is_Found} = True</msg>
+<status status="PASS" starttime="20240611 10:25:01.159" endtime="20240611 10:25:01.160"/>
+</kw>
+<kw name="Get Substring" library="String">
+<var>${text}</var>
+<arg>${messages}</arg>
+<arg>0</arg>
+<arg>9</arg>
+<doc>Returns a substring from ``start`` index to ``end`` index.</doc>
+<msg timestamp="20240611 10:25:01.160" level="INFO">${text} = &lt;div dir=</msg>
+<status status="PASS" starttime="20240611 10:25:01.160" endtime="20240611 10:25:01.160"/>
+</kw>
+<if>
+<branch type="IF" condition="&quot;${text}&quot; == &quot;Not Found&quot;">
+<kw name="Set Variable" library="BuiltIn">
+<var>${Is_Found}</var>
+<arg>False</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="NOT RUN" starttime="20240611 10:25:01.160" endtime="20240611 10:25:01.160"/>
+</kw>
+<status status="NOT RUN" starttime="20240611 10:25:01.160" endtime="20240611 10:25:01.160"/>
+</branch>
+<status status="PASS" starttime="20240611 10:25:01.160" endtime="20240611 10:25:01.160"/>
+</if>
+<return>
+<value>${Is_Found}</value>
+<status status="PASS" starttime="20240611 10:25:01.160" endtime="20240611 10:25:01.160"/>
+</return>
+<msg timestamp="20240611 10:25:01.160" level="INFO">${Check_result} = True</msg>
+<status status="PASS" starttime="20240611 10:25:01.159" endtime="20240611 10:25:01.160"/>
+</kw>
+<if>
+<branch type="IF" condition="${Check_result}">
+<kw name="Exit For Loop If" library="BuiltIn">
+<arg>'${Check_result}' != 'Not Found'</arg>
+<doc>Stops executing the enclosing FOR loop if the ``condition`` is true.</doc>
+<msg timestamp="20240611 10:25:01.161" level="INFO">Exiting for loop altogether.</msg>
+<status status="PASS" starttime="20240611 10:25:01.160" endtime="20240611 10:25:01.161"/>
+</kw>
+<status status="PASS" starttime="20240611 10:25:01.160" endtime="20240611 10:25:01.161"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log To Console" library="BuiltIn">
+<arg>Retry Search ${i}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="NOT RUN" starttime="20240611 10:25:01.161" endtime="20240611 10:25:01.161"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>1S</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" starttime="20240611 10:25:01.161" endtime="20240611 10:25:01.161"/>
+</kw>
+<status status="NOT RUN" starttime="20240611 10:25:01.161" endtime="20240611 10:25:01.161"/>
+</branch>
+<status status="PASS" starttime="20240611 10:25:01.160" endtime="20240611 10:25:01.161"/>
+</if>
+<status status="PASS" starttime="20240611 10:24:57.979" endtime="20240611 10:25:01.161"/>
+</iter>
+<status status="PASS" starttime="20240611 10:24:57.979" endtime="20240611 10:25:01.161"/>
+</for>
+<kw name="Get Regexp Matches" library="String">
+<var>${text}</var>
+<arg>${emails}</arg>
+<arg>[0-9]{6}</arg>
+<doc>Returns a list of all non-overlapping matches in the given string.</doc>
+<msg timestamp="20240611 10:25:01.161" level="INFO">${text} = ['696965']</msg>
+<status status="PASS" starttime="20240611 10:25:01.161" endtime="20240611 10:25:01.161"/>
+</kw>
+<return>
+<value>${text}[0]</value>
+<status status="PASS" starttime="20240611 10:25:01.161" endtime="20240611 10:25:01.161"/>
+</return>
+<msg timestamp="20240611 10:25:01.162" level="INFO">${OTP} = 696965</msg>
+<status status="PASS" starttime="20240611 10:24:57.979" endtime="20240611 10:25:01.162"/>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<arg>OTP: ${OTP}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" starttime="20240611 10:25:01.162" endtime="20240611 10:25:01.162"/>
+</kw>
+<doc>ค้นหาอีเมล์จากข้อความ</doc>
+<status status="PASS" starttime="20240611 10:24:57.978" endtime="20240611 10:25:01.162"/>
+</test>
+<status status="PASS" starttime="20240611 10:24:57.946" endtime="20240611 10:25:01.163"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="1" fail="0" skip="0" id="s1" name="Test">Test</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
